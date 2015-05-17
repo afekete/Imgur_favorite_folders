@@ -1,0 +1,15 @@
+.folder-button {
+  margin: 5px;
+  padding: 10px !important;
+  border: none;
+  font: inherit;
+  line-height: 30px;
+}
+#folders {
+	width: 275px;
+	height: 30px;
+	margin: 5px;
+}
+#member {
+	margin: 5px;
+}
