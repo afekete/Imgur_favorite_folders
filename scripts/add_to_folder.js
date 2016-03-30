@@ -7,15 +7,21 @@ function init() {
 	var htmlURL = chrome.extension.getURL("dropdown.html");
 	$.get(htmlURL, function (data) {
 		$("#right-content").append(data)
-		$("#right-content .panel #folders").after('<p id="status"></p>')
+		$("#right-content .new-panel #folders").after('<p id="status"></p>')
 		chrome.storage.sync.get(null, function (data){
-			var title = $("#image-title").text()
+			var curr_url = window.location.href
+			var url
+			if(in_gallery)
+				url = "/account/favorites/"+curr_url.slice(25)
+			else
+				url = curr_url.slice(16)
 			for(var key in data) {
 				if(data.hasOwnProperty(key)) {
 					$("#folders").prepend('<option value="'+key+'">'+key+'</option>')
 					var items = data[key]
 					for(var i=0; i<items.length; i++) {
-						if(items[i]['title'] === title){
+						console.log(items[i])
+						if(items[i]['url'] === url){
 							member_of.push(key)
 							break;
 						}
@@ -66,8 +72,9 @@ $(document).ready(function() {
 $("#right-content").on("click", "#add-img", function (e) {
 	e.preventDefault();
 	var curr_url = window.location.href
-	var thumb_url = $(".selected div .image-thumb img").attr("data-src")
-	var title = $("#image-title").text()
+	console.log($("a.selected").css("background-image").slice(5, -2))
+	var thumb_url = $("a.selected").css("background-image").slice(5, -2)
+	var title = $(".post-title").text()
 
 	if(!thumb_url){
 		$("#status").text("Not added. Thumbnail url not available.")
@@ -109,17 +116,22 @@ $("#right-content").on("click", "#add-img", function (e) {
 
 $("#right-content").on("click", "#rem-img", function (e) {
 	e.preventDefault;
+	var curr_url = window.location.href
+	var url
+	if(in_gallery)
+		url = "/account/favorites/"+curr_url.slice(25)
+	else
+		url = curr_url.slice(16)
 	var folder_name = $("#folders").val()
 	if(folder_name == ''){
 		$("#status").text("Please choose a folder.")
 		return
 	}
-	var title = $("#image-title").text()
 	chrome.storage.sync.get(folder_name, function (data){
 		var items = data[folder_name]
 		var removed = false
 		for(var i=0; i<items.length; i++) {
-			if(items[i]['title'] == title) {
+			if(items[i]['url'] === url) {
 				items.splice(i, 1)
 				removed = true
 			}

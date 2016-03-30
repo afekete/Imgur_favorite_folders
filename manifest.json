@@ -3,7 +3,7 @@
 
   "name": "Imgur Favorite Folders",
   "description": "This extension allows you to sort your favorite images into folders",
-  "version": "1.0",
+  "version": "1.0.2",
 
   "icons": { 
     "16": "images/icon.png",
